@@ -6,6 +6,24 @@ Questions 1
 
 ++++++++++++++++++++++++++++++++
 Longest Prefix Match
+
+When Twilio handles outbound phone calls, we need to route them based on which 
+carriers give us the best rates for the call. The call gets routed based on the 
+longest prefix that matches the number. For example, a phone number of 
++14123334444 would best match the area prefix +1412 and be routed to the carrier
+that gives us the best rates for the calls to Pittsburgh, PA.
+
+Given an array of prefixes and an array of phone numbers, determine the longest
+prefix matches for each of the phone numbers. The output must be an array of 
+prefixes corresponding to the longest matches for each input phone number.
+
+Contraints:
+- All prefixes will be of shorter length than all phone numbers
+- The second input parameter (numbers) may have repeat elements
+- The output array should contain a subset of the input array of phone numbers
+- Numbers and prefixes will the in the E.164 format, i.e. a plus (+) followed 
+by up to 15 digits (0-9)
+
 """
 
 import unittest

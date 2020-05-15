@@ -5,7 +5,20 @@ Questions 2
 5-13-20
 
 ++++++++++++++++++++++++++++++++
+SMS compliance
+
+Problem statement:
+Given an input string of arbitrary length, output SMS-complliant segments with suffixes
+- A SMS-compliant segment is of length 160 characters or less.
+- do not generate segments if the input fits in a single message
+- A segment suffix looks like '(1/5)' for the first five segments
+- the segment content nd suffix must both fit in the segment
+
+Inputs will only consist of A-Z, a-z, spaces ( ), commas (, ), and periods (.)
+You implementation can expect a maximum of 9 segments per input.
 """
+
+import unittest
 
 def sms_maker(message):
 
@@ -18,27 +31,21 @@ def sms_maker(message):
     if len(message) <= 160:
         return message
 
-    # if the message is not SMS complient, divide it into segments.
+    # if the message is not already SMS complient, divide it into segments.
 
     # store the segments as a list of strings
     segments = []
 
-    # create the first segment, leaving character space for the sms suffix
-    seg = message[:155] # take the first 155 elements from the message and add the suffix
-    segments.append(seg)
-    message = message[155:] # remove the first 155 elements from the message
-
-    # create the middle segments, leaving character space for the sms suffix
-    while len(message) > 154:
-        # create a new segment, starting, with a space, and then add 154 more characters
-        seg = " " + message[:154] # MAY NOT NEED THE SPACE, re-read problem instructions
-        message = message[154:]
+    # create the first and middle segments, leaving character space for the sms suffix
+    while len(message) > 155:
+        seg = message[:155] # take the first 155 elements, leave five spaces for the suffix
         segments.append(seg)
+        message = message[155:] # remove the first 155 elements from the message
 
     # create the last segment
     if len(message) > 0:
         # create a new segment, starting, with a space, and then add remaining message characters
-        seg = " " + message[:]
+        seg = message[:]
         segments.append(seg)
 
     # add the suffix to each sms segment
@@ -50,18 +57,34 @@ def sms_maker(message):
     return segments
 
 
+class testSMSMaker(unittest.TestCase):
+    """Test the sms_maker function."""
+
+    def test_sms_maker(self):
+
+        message1 = "Hello, this is a test message."
+        expected1 = "Hello, this is a test message."
+        self.assertEqual(sms_maker(message1), expected1)
+
+        message3 = "On the far-away island of Sala-ma-Sond, Yertle the Turtle was king of the pond. A nice little pond. It was clean. It was neat. The water was warm. There was plenty to eat. The turtles had everything turtles might need. And they were all happy. Quite happy indeed."
+        message3 = ['On the far-away island of Sala-ma-Sond, Yertle the Turtle was king of the pond. A nice little pond. It was clean. It was neat. The water was warm. There wa(1/2)', 's plenty to eat. The turtles had everything turtles might need. And they were all happy. Quite happy indeed.(2/2)']
+        self.assertEqual(sms_maker(message3), message3)
+
+        message4 = ""
+        message4 = ""
+        self.assertEqual(sms_maker(message3), message3)
+
 if __name__ == '__main__':
 
-    res = sms_maker('hello my name is johanna and Im applying for the twilio hatch program. Its late a night and I’m checking this code for bugs. Right now, I’m trying to type something that will be more than 160 characters. This is a lot of characters for me to type when I’m not trying to say anything in particular. It would be very exciting for me to be a part of the hatch program. There are many jobs out there but what I like about the hatch program is the culture at twilio and the opportunity to hit the ground with lots of learning. There are so many reasons I can think of that this would be a great job for me. ')
-    print(res)
+    unittest.main()
+
 
     """
     Discussion:
     Runtime complexity:O(n)
-    Space complexity:O(n)
 
     Remaining steps for extra credit:
-    split the message over white space
-    append characters to the segments as long as the line count remains less than 154 (for middle segments)
-    start a new line when line count excedes what is desired
+    - split the message over white space
+    - append characters to the segments as long as the line count remains less than 155 (for middle segments)
+    - start a new line when line count excedes what is desired
     """
